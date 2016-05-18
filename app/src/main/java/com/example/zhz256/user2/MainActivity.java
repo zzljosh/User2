@@ -1,5 +1,6 @@
 package com.example.zhz256.user2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,9 +20,9 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
-    Firebase mref;
+    Firebase mref1;
     TextView textView;
-    Button b1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,16 +39,30 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        Intent intent = new Intent(MainActivity.this, DemoService.class);
+        startService(intent);
     }
 
-    protected void onStart(){
+    /*
+    public void starter(View view){
+        Intent intent = new Intent(MainActivity.this, DemoService.class);
+        startService(intent);
+    }*/
 
+    public void stopper(View view){
+        Intent intent = new Intent(MainActivity.this, DemoService.class);
+        stopService(intent);
+    }
+
+
+
+    protected void onStart(){
         super.onStart();
         textView = (TextView)findViewById(R.id.textView2);
-        b1 = (Button)findViewById(R.id.sunny_but);
 
-        mref = new Firebase("https://zhili-110.firebaseio.com/second");
-        mref.addValueEventListener(new ValueEventListener() {
+        mref1 = new Firebase("https://zhili-110.firebaseio.com/second");
+        mref1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String data = dataSnapshot.getValue(String.class);
@@ -57,20 +72,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
             }
         });
-        b1.setOnClickListener(new View.OnClickListener(){
-
-            @Override
-            public void onClick(View v) {
-                mref = new Firebase("https://zhili-110.firebaseio.com/first");
-                EditText editText = (EditText)findViewById(R.id.editText);
-                String edit = editText.getText().toString();
-                mref.setValue(edit);
-            }
-        });
-
     }
 
     @Override
